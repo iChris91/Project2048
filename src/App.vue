@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>2048 Project</h1>
     <!--<img src="./assets/logo.png">-->
     <router-view/>
   </div>
@@ -19,5 +20,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+h1 {
+  font-size:300%;
 }
 </style>
