@@ -2,8 +2,9 @@
   <div>
     <div id="board">
       <div id="over" v-if="over">
-        <p>You lost with <br /><strong>{{ BoardPoints }}</strong><br />points</p>
-        <button @click="closeOver">Ok</button>
+        <p>You lost with <br /><strong>{{ BoardPoints }}</strong><br />points in <br /><strong>{{ timer }} seconds</strong></p>
+        <button @click="closeOver">ReStart</button>
+        <button>Send score</button>
       </div>
       <div id="boardGame">
         <div class="tile" v-bind:key="index" v-for="(line, index) in boardGame">
@@ -34,13 +35,21 @@
 import board from '@/board/board.js'
 import LeaderBoard from './LeaderBoard.vue'
 import Timer from './Timer.vue'
+import store from '@/utils/store.js'
 
 export default {
   name: 'Board',
+  computed: {
+    board () {
+      return store.getters.getBoard
+    }
+  },
   components: { LeaderBoard, Timer },
   methods: {
     closeOver: function () {
       this.over = false
+      board.init(4)
+      this.boardGame = board.squares
     },
     catchKeys: function (event) {
       console.log(event)
@@ -63,8 +72,13 @@ export default {
           board.move('down')
           break
       }
+      if (this.over) {
+        this.endDate = new Date()
+        this.timer = Math.floor((this.endDate - this.startDate) / 1000) % 60
+      }
       this.BoardPoints = board.points
       this.over = board.over
+      store.commit('setBoard', this.board)
       this.$forceUpdate()
     },
     buttonClick: function (param) {
@@ -88,6 +102,7 @@ export default {
       }
       this.BoardPoints = board.points
       this.over = board.over
+      store.commit('setBoard', this.board)
       this.$forceUpdate()
     },
     start: function () {
@@ -104,6 +119,9 @@ export default {
 
     this.boardGame = board.squares
     console.log(this.boardGame)
+    store.commit('setBoard', this.board)
+    this.startDate = new Date()
+    this.timer = 0
     console.log(window.addEventListener('keydown', this.catchKeys))
     this.over = board.over
   },
@@ -111,7 +129,8 @@ export default {
     return {
       boardGame: [],
       BoardPoints: '',
-      over: ''
+      over: '',
+      timer: ''
     }
   }
 }

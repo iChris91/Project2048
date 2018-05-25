@@ -18,10 +18,10 @@ function chrono(){
     sec = "0" + sec
   }
   if(msec < 10){
-    msec = "00" + msec
+    msec = "00" +msec
   }
-  else if(msec < 100) {
-    msec = "0" + msec
+  else if(msec < 100){
+    msec = "0" +msec
   }
   document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec
   timerID = setTimeout("chrono()", 10)

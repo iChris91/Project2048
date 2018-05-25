@@ -27,8 +27,15 @@ export default {
         .get('json')
         // .get(`${this.LeaderBoard.nickname}/${this.LeaderBoard.score}/${this.LeaderBoard.time}`)
         .then(response => {
-          console.log(response)
-          this.scores = response.data
+          console.log(response.data[0])
+          this.scores = response.data.filter(function (score) {
+            console.log('yo' + score.nickname)
+            if (score.nickname !== 'name') {
+              return true
+            } else {
+              return false
+            }
+          })
         })
         .catch(error => console.log(error))
     }
